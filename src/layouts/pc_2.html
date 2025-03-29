@@ -1,0 +1,54 @@
+{% extends "src/layouts/base.html" %}
+
+{% block content %}
+{% for chunk in data|batch(6, '') %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>S.no</th>
+            <th>Image</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>H2</th>
+            <th>H3</th>
+            <th>H5</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in chunk %}
+            {% if item %}
+            <tr>
+                <td>{{ item.sno }}</td>
+                <!-- Image cell with white background -->
+                <td style="background-color: white !important;">
+                    {% set image_path = 'src/layouts/photos/items/' + item.SKU|string|replace(' ', '') + '.jpg' %}
+                    {% if image_path|file_exists %}
+                        <img src="{{ image_path }}" style="width: 100px; height: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    {% else %}
+                        <div style='width:100px;height:100px;background:#fffef2;color:#333;display:flex;align-items:center;justify-content:center;font-size:12px;border:1px dashed #ffd700;border-radius:5px;'>
+                            IMAGE N/A
+                        </div>
+                    {% endif %}
+                </td>
+                <!-- Brand cell with white background -->
+                <td style="background-color: white !important;">
+                    <img src="{{ 'src/layouts/photos/brands/' + item.Brand|string|replace(' ', '') + '.png' }}" 
+                         alt="{{ item.Brand }}" 
+                         style="width: 50px; height: auto;">
+                </td>
+                <!-- Regular transparent cells for model, power, and capacity -->
+                <td>{{ item["SKU"] }}</td>
+                <td>{{ item["H2"] }}</td>
+                <td>{{ item["H3"] }}</td>
+                <td>{{ item["H5"] }}</td>
+                <!-- Regular transparent cell for price -->
+                <td style="font-weight: bold;">₹ {{ "{:,}".format(item.Price|int) }}</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+<div style="page-break-after: always;"></div>
+{% endfor %}
+{% endblock %}

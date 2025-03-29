@@ -9,9 +9,9 @@
             <th>Image</th>
             <th>Brand</th>
             <th>Model</th>
-            <th>Power</th>
-            <th>Capacity</th>
-            <th>Service</th>
+            <th>H2</th>
+            <th>H4</th>
+            <th>H6</th>
             <th>Price</th>
         </tr>
     </thead>
@@ -39,16 +39,9 @@
                 </td>
                 <!-- Regular transparent cells for model, power, and capacity -->
                 <td>{{ item["SKU"] }}</td>
-                <td>{{ item.Power }}</td>
-                <td>{{ item.Capacity }}</td>
-                <!-- Service cell with colored background -->
-                {% if item.Service == 'High' %}
-                    <td style="background-color: rgba(212, 237, 218, 0.75) !important; color: #008502;">High</td>
-                {% elif item.Service == 'Medium' %}
-                    <td style="background-color: rgba(255, 243, 205, 0.75) !important; color: #856404;">Medium</td>
-                {% else %}
-                    <td style="background-color: rgba(248, 215, 218, 0.75) !important; color: #721c24;">Low</td>
-                {% endif %}
+                <td>{{ item["H2"] }}</td>
+                <td>{{ item["H4"] }}</td>
+                <td>{{ item["H6"] }}</td>
                 <!-- Regular transparent cell for price -->
                 <td style="font-weight: bold;">₹ {{ "{:,}".format(item.Price|int) }}</td>
             </tr>
