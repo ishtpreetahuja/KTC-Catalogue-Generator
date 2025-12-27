@@ -14,14 +14,14 @@ st.set_page_config(
 df = pd.read_csv("utils/data.csv")
 
 # Get unique values for dropdowns
-primary_categories = df["Primary Category"].unique().tolist()
-secondary_categories = df["Secondary Category"].unique().tolist()
-brands = df["Brand"].unique().tolist()
+primary_group_options = df["Primary Group"].unique().tolist()
+secondary_group_options = df["Secondary Group"].unique().tolist()
+category_options = df["Category"].unique().tolist()
 
 def clear_text(): # this is the function you define (def is a Python keyword and is short for 'define')
-  st.session_state["primary_category"] = ''  # add "text" as a key using the square brackets notation and set it to have the value ''
-  st.session_state["secondary_category"] = ''  # add "text" as a key using the square brackets notation and set it to have the value ''
-  st.session_state["brand"] = ''  # add "text" as a key using the square brackets notation and set it to have the value ''
+  st.session_state["primary_group"] = ''  # add "text" as a key using the square brackets notation and set it to have the value ''
+  st.session_state["secondary_group"] = ''  # add "text" as a key using the square brackets notation and set it to have the value ''
+  st.session_state["category"] = ''  # add "text" as a key using the square brackets notation and set it to have the value ''
 
 def main():
     # Initialize session state for input values
@@ -32,19 +32,19 @@ def main():
 
     # Dropdowns for user input
     if st.session_state.reset_inputs:
-        primary_category = st.selectbox("Primary Category", [""] + primary_categories, key="primary_category", index=0)
-        secondary_category = st.selectbox("Secondary Category", [""] + secondary_categories, key="secondary_category", index=0)
-        brand = st.selectbox("Brand", [""] + brands, key="brand", index=0)
+        primary_group = st.selectbox("Primary Group", [""] + primary_group_options, key="primary_group", index=0)
+        secondary_group = st.selectbox("Secondary Group", [""] + secondary_group_options, key="secondary_group", index=0)
+        category = st.selectbox("Category", [""] + category_options, key="category", index=0)
         st.session_state.reset_inputs = False
     else:
-        primary_category = st.selectbox("Primary Category", [""] + primary_categories, key="primary_category")
-        secondary_category = st.selectbox("Secondary Category", [""] + secondary_categories, key="secondary_category")
-        brand = st.selectbox("Brand", [""] + brands, key="brand")
+        primary_group = st.selectbox("Primary Group", [""] + primary_group_options, key="primary_group")
+        secondary_group = st.selectbox("Secondary Group", [""] + secondary_group_options, key="secondary_group")
+        category = st.selectbox("Category", [""] + category_options, key="category")
 
     # Buttons for generating PDF and syncing data
     if st.button("Generate PDF"):
         with st.spinner('Generating PDF...'):
-            generator(primary_category, secondary_category, brand)
+            generator(primary_group, secondary_group, category)
             st.success("PDF generated successfully and email sent!")
             time.sleep(5)
             st.rerun()

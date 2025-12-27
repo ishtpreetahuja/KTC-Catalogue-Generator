@@ -5,13 +5,13 @@
 <table class="table">
     <thead>
         <tr>
-            <th>S.no</th>
-            <th>Image</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Name</th>
+            <th style="width: 5%;">S.no</th>
+            <th style="width: 15%; min-width: 100px;">Image</th>
+            <th style="width: 10%;">Brand</th>
+            <th style="width: 15%;">Model</th>
+            <th style="width: 35%;">Name</th>
             <!--<th>Service</th>-->
-            <th>Price</th>
+            <th style="width: 15%;">Price</th>
         </tr>
     </thead>
     <tbody>
@@ -25,8 +25,8 @@
                     {% if image_path|file_exists %}
                         <img src="{{ image_path }}" style="width: 100px; height: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     {% else %}
-                        <div style='width:100px;height:100px;background:#fffef2;color:#333;display:flex;align-items:center;justify-content:center;font-size:12px;border:1px dashed #ffd700;border-radius:5px;'>
-                            IMAGE N/A
+                        <div style='width:100px;height:100px;background:#fffef2;color:#333;display:flex;align-items:center;justify-content:center;font-size:12px;border:1px dashed #ffd700;border-radius:5px;word-wrap:break-word;padding:2px;'>
+                            IMAGE<br/>N/A
                         </div>
                     {% endif %}
                 </td>
@@ -38,7 +38,7 @@
                 </td>
                 <!-- Regular transparent cells for model, power, and capacity -->
                 <td>{{ item["SKU"] }}</td>
-                <td>{{ item["Name"]}}</td>
+                <td style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">{{ item["Name"]}}</td>
                 <!-- Service cell with colored background -->
                 <!--{% if item.Service == 'High' %}
                     <td style="background-color: rgba(212, 237, 218, 0.75) !important; color: #008502;">High</td>

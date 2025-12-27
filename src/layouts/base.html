@@ -94,13 +94,10 @@
             text-align: center;
             margin-top: 80px;
             margin-bottom: 20px;
-            width: 100vw;
-            /* margin-left: calc(-50vw + 50%);
-            margin-right: calc(-50vw + 50%); */
             padding: 15px 0;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             white-space: nowrap;
             font-size: 28px;
             background: #ffffff;
@@ -178,12 +175,12 @@
 </head>
 <body>
     <div class="header">
-        <!-- <img src="src/layouts/photos/brands/ktc.png" alt="KTC Logo" class="company-logo" style="padding: 10px;"> -->
+        <div style="width: 80px;"></div> <!-- Left spacer for alignment -->
         <div class="header-content">
             <h1>Khandelwal Trading Co.</h1>
             <h2>{{ sub_head }}</h2>
         </div>
-        <div style="width: 80px;"></div> <!-- Spacer for alignment -->
+        <div style="width: 80px;"></div> <!-- Right spacer for alignment -->
     </div>
     {% block content %}
     {% endblock %}

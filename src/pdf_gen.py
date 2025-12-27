@@ -7,8 +7,8 @@ import os
 def file_exists(path):
     return os.path.isfile(path)
 
-def generator(primary_category=None, secondary_category=None, brand=None):
-    print(f"Generating PDF catalogue for: {primary_category}, {secondary_category}, {brand}")
+def generator(primary_group=None, secondary_group=None, category=None):
+    print(f"Generating PDF catalogue for: {primary_group}, {secondary_group}, {category}")
 
     # Load data from a local CSV file
     df = pd.read_csv("utils/data.csv")
@@ -16,12 +16,12 @@ def generator(primary_category=None, secondary_category=None, brand=None):
 
     # Filter rows based on the inputs
     filtered_df = df.copy()
-    if primary_category:
-        filtered_df = filtered_df[filtered_df["Primary Category"].str.lower() == primary_category.lower()]
-    if secondary_category:
-        filtered_df = filtered_df[filtered_df["Secondary Category"].str.lower() == secondary_category.lower()]
-    if brand:
-        filtered_df = filtered_df[filtered_df["Brand"].str.lower() == brand.lower()]
+    if primary_group:
+        filtered_df = filtered_df[filtered_df["Primary Group"].str.lower() == primary_group.lower()]
+    if secondary_group:
+        filtered_df = filtered_df[filtered_df["Secondary Group"].str.lower() == secondary_group.lower()]
+    if category:
+        filtered_df = filtered_df[filtered_df["Category"].str.lower() == category.lower()]
 
     print(f"Debug - Found {len(filtered_df)} matching rows")
 
@@ -29,9 +29,9 @@ def generator(primary_category=None, secondary_category=None, brand=None):
     filtered_df.reset_index(drop=True, inplace=True)
     filtered_df['sno'] = filtered_df.index + 1
 
-    # Determine the template to use based on the primary category
-    if primary_category:
-        template_name = f"src/layouts/{primary_category.lower().replace(' ', '')}.html"
+    # Determine the template to use based on the primary group
+    if primary_group:
+        template_name = f"src/layouts/{primary_group.lower().replace(' ', '')}.html"
         if not file_exists(template_name):
             print(f"Debug - Template {template_name} not found. Reverting to default template.")
             template_name = "src/layouts/powertools.html"
@@ -48,17 +48,17 @@ def generator(primary_category=None, secondary_category=None, brand=None):
         filtered_df["Price"] = filtered_df["Price"].astype(int)
     
     # Render template with filtered DataFrame data
-    html_content = template.render(data=filtered_df.to_dict(orient="records"), sub_head=f"{primary_category or ''} {secondary_category or ''}  {brand or ''}")
+    html_content = template.render(data=filtered_df.to_dict(orient="records"), sub_head=f"{primary_group or ''} {secondary_group or ''}  {category or ''}")
 
     # Define the output PDF path
-    primary_filename = primary_category.lower().strip().replace(" ", "-") if primary_category else "catalogue"
+    primary_filename = primary_group.lower().strip().replace(" ", "-") if primary_group else "catalogue"
     filename = primary_filename
-    if secondary_category:
-        secondary_filename = secondary_category.lower().strip().replace(" ", "-")
+    if secondary_group:
+        secondary_filename = secondary_group.lower().strip().replace(" ", "-")
         filename = f"{primary_filename}_{secondary_filename}"
-    if brand:
-        brand_filename = brand.lower().strip().replace(" ", "-")
-        filename = f"{filename}_{brand_filename}"
+    if category:
+        category_filename = category.lower().strip().replace(" ", "-")
+        filename = f"{filename}_{category_filename}"
     output_pdf_path = f"{filename}.pdf"
 
     # Convert to PDF
@@ -66,7 +66,7 @@ def generator(primary_category=None, secondary_category=None, brand=None):
     print("PDF generated successfully!")
 
     # Send email
-    send_email(subject=f"Catalogue for {primary_category or 'All'} - {secondary_category or 'All'} - {brand or 'All'}", attachment_path=output_pdf_path)
+    send_email(subject=f"Catalogue for {primary_group or 'All'} - {secondary_group or 'All'} - {category or 'All'}", attachment_path=output_pdf_path)
     print("Email sent successfully!")
 
 if __name__ == '__main__':

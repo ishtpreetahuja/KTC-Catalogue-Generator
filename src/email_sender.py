@@ -37,7 +37,8 @@ def send_email(subject, attachment_path):
         )
         msg.attach(part)
 
-    recipients = [TO_EMAIL] + [CC_EMAIL]
+    # Build recipients list, filtering out None values
+    recipients = [email for email in [TO_EMAIL, CC_EMAIL] if email]
 
     # Send the email
     with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
