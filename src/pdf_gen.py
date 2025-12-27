@@ -1,11 +1,19 @@
+import os
+from pathlib import Path
+
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
+
 from email_sender import send_email
-import os
 
 def file_exists(path):
     return os.path.isfile(path)
+
+
+def to_uri(path):
+    # Resolve to an absolute file:// URI so WeasyPrint can load local assets reliably
+    return Path(path).resolve().as_uri()
 
 def generator(primary_group=None, secondary_group=None, category=None):
     print(f"Generating PDF catalogue for: {primary_group}, {secondary_group}, {category}")
@@ -41,6 +49,7 @@ def generator(primary_group=None, secondary_group=None, category=None):
     # Load Jinja2 template
     env = Environment(loader=FileSystemLoader("."))
     env.filters['file_exists'] = file_exists  # Register the custom filter
+    env.filters['to_uri'] = to_uri  # Ensure local assets resolve to file:// URIs
     template = env.get_template(template_name)
 
     # Convert "Price" column to int
