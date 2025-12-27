@@ -13,6 +13,7 @@ load_dotenv(dotenv_path="utils/.env")
 EMAIL = os.getenv("RECEIVER-EMAIL")
 PASSWORD = os.getenv("RECEIVER-PASSWORD")
 TO_EMAIL = os.getenv("TO-EMAIL")
+CC_EMAIL = os.getenv("CC-EMAIL")
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 
@@ -20,6 +21,7 @@ def send_email(subject, attachment_path):
     msg = MIMEMultipart()
     msg["From"] = EMAIL
     msg["To"] = TO_EMAIL
+    msg["Cc"] = CC_EMAIL
     msg["Subject"] = subject
     
     msg.attach(MIMEText("Please find the requested catalogue attached.", "plain"))
@@ -35,11 +37,13 @@ def send_email(subject, attachment_path):
         )
         msg.attach(part)
 
+    recipients = [TO_EMAIL] + [CC_EMAIL]
+
     # Send the email
     with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
         server.starttls()
         server.login(EMAIL, PASSWORD)
-        server.sendmail(EMAIL, TO_EMAIL, msg.as_string())
+        server.sendmail(EMAIL, recipients, msg.as_string())
     
     # Delete the PDF file
     os.remove(attachment_path)
